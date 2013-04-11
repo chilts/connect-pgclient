@@ -111,14 +111,14 @@ Once you have setup and called your ```connect-postgres``` middleware, you Postg
 ```req``` object as follows:
 
 ```javascript
-    // the node-pg client
-    req.db.client
+// the node-pg client
+req.db.client
 
-    // the done function which node-pg needs to return the client to the pool
-    req.db.done
+// the done function which node-pg needs to return the client to the pool
+req.db.done
 
-    // boolean to show us whether we are in the middle of a transaction
-    req.db.transaction
+// boolean to show us whether we are in the middle of a transaction
+req.db.transaction
 ```
 
 In general, you should only ever use the ```req.db.client``` property of ```req.db```.
@@ -166,7 +166,7 @@ app.use(postgres({
 ### Connect to the DB within Specific Routes ###
 
 The database clients are released back to ```node-pg``` even if the request ends in ```res.send()```,
-```res.redirect()``` or even in error ```next(err)```.
+```res.redirect()```, ```res.json()```, ```res.render()``` or even in error ```next(err)```.
 
 For example:
 
