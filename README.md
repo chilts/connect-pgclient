@@ -70,6 +70,24 @@ app.get(
 );
 ```
 
+## Usage ##
+
+Once you have setup and called your ```connect-postgres``` middleware, you Postgres client is available on the
+```req``` object as follows:
+
+```javascript
+    // the node-pg client
+    req.db.client
+
+    // the done function which node-pg needs to return the client to the pool
+    req.db.done
+
+    // boolean to show us whether we are in the middle of a transaction
+    req.db.transaction
+```
+
+In general, you should only ever use the ```req.db.client``` property of ```req.db```.
+
 ## Options ##
 
 * config - the database connection params as defined in [node-postgres](https://github.com/brianc/node-postgres/wiki/Client#parameters)
@@ -167,7 +185,10 @@ app.get(
 app.get(
     '/roulette',
     connectToDbWithTransaction,
-    insSomethingIntoDb,
+    function(req, res, next) {
+        // this is how you get your freshly minted Postgres client
+        req.db.client("SELECT now()", next);
+    },
     function(req, res, next) {
         if ( Math.random() < 0.5 ) {
             // even though we're not calling node-pg's done(), connect-postgres does it for us even here
