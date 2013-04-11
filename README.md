@@ -88,7 +88,7 @@ var postgres = require('connect-postgres');
 app.use(postgres({
     config : {
         database : 'dbname',
-        user     : 'me,
+        user     : 'me',
         host     : 'dbserver.internal',
     },
 }));
@@ -103,7 +103,7 @@ var postgres = require('connect-postgres');
 app.use(postgres({
     config : {
         database : 'dbname',
-        user     : 'me,
+        user     : 'me',
         host     : 'dbserver.internal',
     },
 }));
@@ -118,14 +118,14 @@ The database clients are released back to ```node-pg``` even if the request ends
 var connectToDb = postgres({
     config : {
         database : 'dbname',
-        user     : 'me,
+        user     : 'me',
         host     : 'dbserver.internal',
     },
 });
 var connectToDbWithTransaction = postgres({
     config : {
         database : 'dbname',
-        user     : 'me,
+        user     : 'me',
         host     : 'dbserver.internal',
     },
     transaction : true,
