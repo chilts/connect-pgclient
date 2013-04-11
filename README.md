@@ -75,7 +75,7 @@ app.get(
         }
         next();
     },
-    // must remember to release here, otherwise you'll lost another DB client
+    // must remember to release here, otherwise you'll lose another DB client
     disconnectFromDb,
     function(req, res) {
         res.send('Ok');
