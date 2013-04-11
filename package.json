@@ -1,0 +1,34 @@
+{
+    "name" : "connect-postgres",
+    "description" : "Connect middleware to manage Postgres connections.",
+    "version" : "0.1.0",
+    "author" : {
+        "name" : "Andrew Chilton",
+        "email" : "andychilton@gmail.com",
+        "url" : "http://chilts.org/blog/"
+    },
+    "homepage" : "https://github.com/chilts/connect-postgres",
+    "main" : "./connect-postgres.js",
+    "devDependencies": {},
+    "dependencies" : {
+        "pg" : "1.x.x"
+    },
+    "repository": {
+        "type" : "git",
+        "url": "git://github.com/chilts/connect-postgres.git"
+    },
+   "bugs" : {
+        "url" : "http://github.com/chilts/connect-postgres/issues",
+        "mail" : "andychilton@gmail.com"
+    },
+    "licenses": [{
+        "type": "MIT",
+        "url": "http://github.com/chilts/connect-postgres/raw/master/LICENSE"
+    }],
+    "keywords": [
+        "connect", "express", "middleware", "postgres", "node-pg", "pg"
+    ],
+    "scripts" : {
+        "test" : "./node_modules/.bin/tap test/"
+    }
+}
