@@ -21,6 +21,10 @@
 This module is aimed at taking the pain away from managing your Postgres connections from within a connect/express
 app. Too many times has ```res.redirect()``` been used and left the DB connection hanging.
 
+```bash
+npm install connect-postgres
+```
+
 ```connect-postgres``` helps you manage (and free) your Postgres database connections so you don't have to. It
 automatically gets a client from ```node-pg``` at the start of the request and calls ```done()``` at the end of the
 request to automatically return the client back to pg's pool. This way you'll never lose any clients by accidentally
