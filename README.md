@@ -115,7 +115,11 @@ app.use(postgres({
 The database clients are released back to ```node-pg``` even if the request ends in ```res.send()```,
 ```res.redirect()``` or even in error ```next(err)```.
 
+For example:
+
 ```javascript
+// Postgres middleware which gets a Pg client and releases it after
+// the request has been fulfilled.
 var connectToDb = postgres({
     config : {
         database : 'dbname',
@@ -123,6 +127,9 @@ var connectToDb = postgres({
         host     : 'dbserver.internal',
     },
 });
+
+// Postgres middleware which gets a Pg client, starts a transaction
+// and commits and releases it after the request has been fulfilled.
 var connectToDbWithTransaction = postgres({
     config : {
         database : 'dbname',
@@ -132,6 +139,7 @@ var connectToDbWithTransaction = postgres({
     transaction : true,
 });
 
+// a route which always succeeds - Pg client is released ok
 app.get(
     '/',
     connectToDb,
@@ -140,6 +148,7 @@ app.get(
     }
 );
 
+// a route which redirects 50% of the time - Pg client is released ok
 app.get(
     '/random',
     connectToDb,
@@ -154,6 +163,7 @@ app.get(
     }
 );
 
+// a route which dies 50% of the time - Pg client is released ok
 app.get(
     '/roulette',
     connectToDbWithTransaction,
@@ -173,16 +183,20 @@ app.get(
 ## How it Works ##
 
 Using [brianc](https://github.com/brianc/)'s excellent [pg](https://npmjs.org/package/pg) library, we connect to the
-database and store both the client and the done function onto the ```req``` so that we can use the client in our routes
-really easily, but also call ```done``` at a later date.
+database and store both the ```client``` and the ```done``` function onto the ```req``` so that we can use the client
+in our routes, but also automatically call ```done``` when the request has finished.
 
 ```connect-postgres``` works much like connect's ```session``` middleware in that it wraps ```res.end()``` so that we
-can get control both before and after the result has been generated, which allows us to give the client back to pg's
-pool.
+can get control both before and after the request has been fulfilled, which allows us to give the client back to pg's
+pool automatically no matter what happened during the request.
 
-It works in a similar way to ```connect-session``` (it wraps res.end()) such that the client is freed whether your
-request ends in success, a redirect or failure.
+## Caveat ##
 
+When you use ```connect-postgres``` to give you a client and automatically start a transaction, if the request ends up
+in error, the transaction still has ```COMMIT``` performed. In this error case, I think ```ROLLBACK``` should be called
+instead but I'm not yet sure how to detect if the request is in the error state.
+
+(Note: remember that this is *after* the request has been fulfilled, which is after any error middleware has been run.)
 
 # Author #
 
