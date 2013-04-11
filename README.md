@@ -106,6 +106,7 @@ app.use(postgres({
         user     : 'me',
         host     : 'dbserver.internal',
     },
+    transaction : true,
 }));
 ```
 
