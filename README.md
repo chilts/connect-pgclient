@@ -30,7 +30,38 @@ automatically gets a client from ```node-pg``` at the start of the request and c
 request to automatically return the client back to pg's pool. This way you'll never lose any clients by accidentally
 not calling ```done```.
 
-For example:
+## Example ##
+
+```javascript
+var postgres = require('connect-postgres');
+
+var dbMiddleware = postgres({
+    config : {
+        database : 'dbname',
+        user     : 'me',
+        host     : 'dbserver.internal',
+    },
+});
+
+app.get(
+    '/',
+    dbMiddleware,
+    function(req, res, next) {
+        // here you can use req.db.client to perform queries
+        next();
+    },
+    function(req, res) {
+        res.send('Ok');
+    }
+    // req.db.done is automatically called to release the client
+);
+```
+
+## What does this package solve? ##
+
+If you are trying to do your Pg clients manually, then there are various cases which you might forget about where you
+should call ```done()```. Here is an example when you have a client but call ```res.redirect()``` and forget to release
+it again:
 
 ```javascript
 app.get(
@@ -58,7 +89,7 @@ Using ```connect-postgres``` you'll be able to do this:
 app.get(
     '/',
      // middleware you created using connect-postgres
-    connectToPostgres,
+    dbMiddleware,
     selectSomethingFromDb,
     function(req, res) {
         if ( somethingWasntFound ) {
