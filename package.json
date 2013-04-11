@@ -1,7 +1,7 @@
 {
     "name" : "connect-postgres",
     "description" : "Connect middleware to manage Postgres connections.",
-    "version" : "0.1.1",
+    "version" : "0.1.2",
     "author" : {
         "name" : "Andrew Chilton",
         "email" : "andychilton@gmail.com",
