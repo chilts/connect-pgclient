@@ -8,24 +8,25 @@
 | (____/\| (___) || )  \  || )  \  || (____/\| (____/\   | |                   
 (_______/(_______)|/    )_)|/    )_)(_______/(_______/   )_(                   
                                                                                
-        _______  _______  _______ _________ _______  _______  _______  _______ 
-       (  ____ )(  ___  )(  ____ \\__   __/(  ____ \(  ____ )(  ____ \(  ____ \
-       | (    )|| (   ) || (    \/   ) (   | (    \/| (    )|| (    \/| (    \/
- _____ | (____)|| |   | || (_____    | |   | |      | (____)|| (__    | (_____ 
-(_____)|  _____)| |   | |(_____  )   | |   | | ____ |     __)|  __)   (_____  )
-       | (      | |   | |      ) |   | |   | | \_  )| (\ (   | (            ) |
-       | )      | (___) |/\____) |   | |   | (___) || ) \ \__| (____/\/\____) |
-       |/       (_______)\_______)   )_(   (_______)|/   \__/(_______/\_______)
+        _______  _______  _______  _       _________ _______  _       _________
+       (  ____ )(  ____ \(  ____ \( \      \__   __/(  ____ \( (    /|\__   __/
+       | (    )|| (    \/| (    \/| (         ) (   | (    \/|  \  ( |   ) (   
+ _____ | (____)|| |      | |      | |         | |   | (__    |   \ | |   | |   
+(_____)|  _____)| | ____ | |      | |         | |   |  __)   | (\ \) |   | |   
+       | (      | | \_  )| |      | |         | |   | (      | | \   |   | |   
+       | )      | (___) || (____/\| (____/\___) (___| (____/\| )  \  |   | |   
+       |/       (_______)(_______/(_______/\_______/(_______/|/    )_)   )_(   
+                                                                               
 ```                                                                               
 
 This module is aimed at taking the pain away from managing your Postgres connections from within a connect/express
 app. Too many times has ```res.redirect()``` been used and left the DB connection hanging.
 
 ```bash
-npm install connect-postgres
+npm install connect-pgclient
 ```
 
-```connect-postgres``` helps you manage (and free) your Postgres database connections so you don't have to. It
+```connect-pgclient``` helps you manage (and free) your Postgres database connections so you don't have to. It
 automatically gets a client from ```node-pg``` at the start of the request and calls ```done()``` at the end of the
 request to automatically return the client back to pg's pool. This way you'll never lose any clients by accidentally
 not calling ```done```.
@@ -33,9 +34,9 @@ not calling ```done```.
 ## Example ##
 
 ```javascript
-var postgres = require('connect-postgres');
+var pgclient = require('connect-pgclient');
 
-var dbMiddleware = postgres({
+var dbMiddleware = pgclient({
     config : {
         database : 'dbname',
         user     : 'me',
@@ -83,12 +84,12 @@ app.get(
 );
 ```
 
-Using ```connect-postgres``` you'll be able to do this:
+Using ```connect-pgclient``` you'll be able to do this:
 
 ```javascript
 app.get(
     '/',
-     // middleware you created using connect-postgres
+     // middleware you created using connect-pgclient
     dbMiddleware,
     selectSomethingFromDb,
     function(req, res) {
@@ -107,7 +108,7 @@ app.get(
 
 ## Usage ##
 
-Once you have setup and called your ```connect-postgres``` middleware, you Postgres client is available on the
+Once you have setup and called your ```connect-pgclient``` middleware, you Postgres client is available on the
 ```req``` object as follows:
 
 ```javascript
@@ -136,9 +137,9 @@ In general, you should only ever use the ```req.db.client``` property of ```req.
 You may or may not want to do this, but it shows a good example for starters:
 
 ```javascript
-var postgres = require('connect-postgres');
+var pgclient = require('connect-pgclient');
 
-app.use(postgres({
+app.use(pgclient({
     config : {
         database : 'dbname',
         user     : 'me',
@@ -147,13 +148,13 @@ app.use(postgres({
 }));
 ```
 
-If you would like ```connect-postgres``` to BEGIN and COMMIT a transaction for you, then just pass the
+If you would like ```connect-pgclient``` to BEGIN and COMMIT a transaction for you, then just pass the
 ```transaction``` param as ```true``` into the options.
 
 ```javascript
-var postgres = require('connect-postgres');
+var pgclient = require('connect-pgclient');
 
-app.use(postgres({
+app.use(pgclient({
     config : {
         database : 'dbname',
         user     : 'me',
@@ -173,7 +174,7 @@ For example:
 ```javascript
 // Postgres middleware which gets a Pg client and releases it after
 // the request has been fulfilled.
-var connectToDb = postgres({
+var connectToDb = pgclient({
     config : {
         database : 'dbname',
         user     : 'me',
@@ -183,7 +184,7 @@ var connectToDb = postgres({
 
 // Postgres middleware which gets a Pg client, starts a transaction
 // and commits and releases it after the request has been fulfilled.
-var connectToDbWithTransaction = postgres({
+var connectToDbWithTransaction = pgclient({
     config : {
         database : 'dbname',
         user     : 'me',
@@ -207,7 +208,7 @@ app.get(
     connectToDb,
     function(req, res) {
         if ( Math.random() < 0.5 ) {
-            // even though we're not calling node-pg's done(), connect-postgres does it for us even here
+            // even though we're not calling node-pg's done(), connect-pgclient does it for us even here
             res.redirect('/');
         }
         else {
@@ -226,7 +227,7 @@ app.get(
     },
     function(req, res, next) {
         if ( Math.random() < 0.5 ) {
-            // even though we're not calling node-pg's done(), connect-postgres does it for us even here
+            // even though we're not calling node-pg's done(), connect-pgclient does it for us even here
             next(new Error("Die die die!"));
         }
         else {
@@ -242,13 +243,13 @@ Using [brianc](https://github.com/brianc/)'s excellent [pg](https://npmjs.org/pa
 database and store both the ```client``` and the ```done``` function onto the ```req``` so that we can use the client
 in our routes, but also automatically call ```done``` when the request has finished.
 
-```connect-postgres``` works much like connect's ```session``` middleware in that it wraps ```res.end()``` so that we
+```connect-pgclient``` works much like connect's ```session``` middleware in that it wraps ```res.end()``` so that we
 can get control both before and after the request has been fulfilled, which allows us to give the client back to pg's
 pool automatically no matter what happened during the request.
 
 ## Caveat ##
 
-When you use ```connect-postgres``` to give you a client and automatically start a transaction, if the request ends up
+When you use ```connect-pgclient``` to give you a client and automatically start a transaction, if the request ends up
 in error, the transaction still has ```COMMIT``` performed. In this error case, I think ```ROLLBACK``` should be called
 instead but I'm not yet sure how to detect if the request is in the error state.
 

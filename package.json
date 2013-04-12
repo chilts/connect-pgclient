@@ -1,5 +1,5 @@
 {
-    "name" : "connect-postgres",
+    "name" : "connect-pgclient",
     "description" : "Connect middleware to manage Postgres connections.",
     "version" : "0.1.3",
     "author" : {
@@ -7,28 +7,26 @@
         "email" : "andychilton@gmail.com",
         "url" : "http://chilts.org/blog/"
     },
-    "homepage" : "https://github.com/chilts/connect-postgres",
-    "main" : "./connect-postgres.js",
+    "homepage" : "https://github.com/chilts/connect-pgclient",
+    "main" : "./connect-pgclient.js",
     "devDependencies": {},
     "dependencies" : {
         "pg" : "1.x.x"
     },
     "repository": {
         "type" : "git",
-        "url": "git://github.com/chilts/connect-postgres.git"
+        "url": "git://github.com/chilts/connect-pgclient.git"
     },
    "bugs" : {
-        "url" : "http://github.com/chilts/connect-postgres/issues",
+        "url" : "http://github.com/chilts/connect-pgclient/issues",
         "mail" : "andychilton@gmail.com"
     },
     "licenses": [{
         "type": "MIT",
-        "url": "http://github.com/chilts/connect-postgres/raw/master/LICENSE"
+        "url": "http://github.com/chilts/connect-pgclient/raw/master/LICENSE"
     }],
     "keywords": [
-        "connect", "express", "middleware", "postgres", "node-pg", "pg"
+        "connect", "express", "middleware", "postgres", "node-pg", "pg", "pgclient"
     ],
-    "scripts" : {
-        "test" : "./node_modules/.bin/tap test/"
-    }
+    "scripts" : {}
 }
