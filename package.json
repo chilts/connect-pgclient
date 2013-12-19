@@ -11,7 +11,7 @@
     "main" : "./connect-pgclient.js",
     "devDependencies": {},
     "dependencies" : {
-        "pg" : "1.x.x"
+        "pg" : "*"
     },
     "repository": {
         "type" : "git",
